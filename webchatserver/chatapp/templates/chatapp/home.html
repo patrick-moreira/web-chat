@@ -5,9 +5,17 @@
 {% block content %}
 {% if user.is_authenticated %}
     Hi {{ user.username }}!
-    <p><a href="{% url 'logout' %}">Logout</a></p>
+    <p><a href="{% url 'chatapp:logout' %}">Logout</a></p>
 
+    {% if messages %}
 
+        <ul style="list-style: none;">
+        {% for msg in messages %}
+            <li> <b>{{ msg.from }}</b>: {{ msg.text }} </li>
+        {% endfor %}
+        </ul>
+
+    {% endif %}
 
 {% else %}
   <p>You are not logged in</p>

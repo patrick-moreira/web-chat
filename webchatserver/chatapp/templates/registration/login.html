@@ -4,7 +4,7 @@
 
 {% block content %}
 <h2>Login</h2>
-<form method="post" action="{% url 'login' %}">
+<form method="post" action="{% url 'chatapp:login' %}">
     {% csrf_token %}
     <table>
     <tr>
@@ -20,4 +20,13 @@
     <input type="submit" value="Login">
     <input type="hidden" name="next" value="{{ next }}">
 </form>
+
+<button id="signup" type=button> Cadastrar </button>
+
+<script>
+    document.getElementById("signup").addEventListener("click", function() {
+        location.href = "/signup"
+    })
+</script>
+
 {% endblock %}

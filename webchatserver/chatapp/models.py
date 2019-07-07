@@ -1,13 +1,14 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Message(models.Model):
 
-    origin = models.CharField(max_length=25)
-    destination = models.CharField(max_length=25)
-    text = models.CharField(max_length=255, default="")
+    origin = models.ForeignKey(User, on_delete=models.CASCADE, related_name="src")
+    destination = models.ForeignKey(User, on_delete=models.CASCADE, related_name="dest")
+    text = models.TextField(default="")
     date = models.DateTimeField()
 
     def __str__(self):
-        return self.origin + " " + self.destination + " " + self.text
+        return str(self.text)
 

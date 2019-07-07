@@ -27,8 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-LOGIN_REDIRECT_URL = 'chat/'
-LOGOUT_REDIRECT_URL = 'login'
+LOGIN_REDIRECT_URL = 'chatapp:home'
+LOGOUT_REDIRECT_URL = 'chatapp:login'
 
 # Application definition
 
@@ -57,7 +57,7 @@ ROOT_URLCONF = 'chat.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['chatapp/templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

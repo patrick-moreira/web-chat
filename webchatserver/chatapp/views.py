@@ -1,8 +1,26 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import reverse_lazy
+from django.views import generic
+
+from .models import Message
+
+
+class ChatView(generic.ListView):
+    template_name = 'chatapp/home.html'
+    context_object_name = 'messages'
+
+    def get_queryset(self):
+        return Message.objects.all()
+
+
+class SignUp(generic.CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('chatapp:login')
+    template_name = 'registration/signup.html'
 
 
 def index(request):
