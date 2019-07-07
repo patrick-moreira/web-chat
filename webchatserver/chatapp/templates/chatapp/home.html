@@ -19,7 +19,7 @@
             $.get({
                 url: "{% url 'chatapp:load_messages' %}",
                 data: {
-                    "to": dest,
+                    "to": dest == null ? "global" : dest,
                     "from": src
                 }
             }).done(function(response) {
@@ -41,20 +41,20 @@
                 url: "{% url 'chatapp:send_message' %}",
                 data: {
                     'message': msg,
-                    'to': "8",
+                    'to': "global",
                     'from': "{{user.id}}"
                 },
                 headers: {
                     "X-CSRFToken": Cookies.get('csrftoken')
                 }
             }).done(function(response) {
-                loadMessages("{{user.id}}", "8");
+                loadMessages("{{user.id}}", null);
             })
         };
 
         $(document).ready(function () {
-            loadMessages("{{user.id}}", "8");
-            window.setInterval(function() { loadMessages("{{user.id}}", "8") }, 2500);
+            loadMessages("{{user.id}}", null);
+            window.setInterval(function() { loadMessages("{{user.id}}", null) }, 2500);
         });
 
         $("#send-button").click(sendMessageEvent);
