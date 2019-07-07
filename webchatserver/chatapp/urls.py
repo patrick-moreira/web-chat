@@ -9,4 +9,7 @@ urlpatterns = [
     path('signup/', views.SignUp.as_view(), name='signup'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('chat/', views.ChatView.as_view(), name='home'),
+    path('message/', views.send_message, name='send_message'),
+    path('load_messages/', views.load_messages, name='load_messages')
+
 ]

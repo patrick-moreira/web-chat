@@ -1,0 +1,9 @@
+{% if messages %}
+
+    <ul style="list-style: none;">
+    {% for msg in messages %}
+        <li> <b>{{ msg.origin }}</b>: {{ msg.text }} </li>
+    {% endfor %}
+    </ul>
+
+{% endif %}

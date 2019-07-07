@@ -7,18 +7,64 @@
     Hi {{ user.username }}!
     <p><a href="{% url 'chatapp:logout' %}">Logout</a></p>
 
-    {% if messages %}
+    <div id="messages-div">
+    </div>
 
-        <ul style="list-style: none;">
-        {% for msg in messages %}
-            <li> <b>{{ msg.from }}</b>: {{ msg.text }} </li>
-        {% endfor %}
-        </ul>
+    <input id="text-field" type="text">
+    <button id="send-button" type="button"> Enviar </button>
 
-    {% endif %}
+    <script>
+
+        loadMessages = function() {
+            $.get({
+                url: "{% url 'chatapp:load_messages' %}",
+                data: {
+                    "to": 1,
+                    "from": "{{user.id}}"
+                }
+            }).done(function(response) {
+                console.log("ENTROU");
+                $("#messages-div").html(response);
+            })
+
+        };
+
+        $(document).ready(function () {
+            loadMessages();
+            window.setInterval(loadMessages, 2500);
+        });
+
+        $("#send-button").click(function(){
+            var textfield = $("#text-field");
+            var msg = textfield.val();
+
+            textfield.val('');
+
+            if (msg === "") {
+                return;
+            }
+
+            $.post({
+                url: "{% url 'chatapp:send_message' %}",
+                data: {
+                    'message': msg,
+                    'to': 1,
+                    'from': "{{user.id}}"
+                },
+                headers: {
+                    "X-CSRFToken": Cookies.get('csrftoken')
+                }
+            }).done(function(response) {
+                loadMessages();
+            })
+        });
+
+    </script>
 
 {% else %}
   <p>You are not logged in</p>
   <a href="{% url 'login' %}">login</a>
 {% endif %}
+
+
 {% endblock %}

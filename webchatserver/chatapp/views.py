@@ -1,9 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views import generic
 
 from .models import Message
@@ -23,37 +25,37 @@ class SignUp(generic.CreateView):
     template_name = 'registration/signup.html'
 
 
-def index(request):
-    return render(request, 'chatapp/index.html')
+def send_message(request):
+
+    dest = int(request.POST['to'])
+    src = int(request.POST['from'])
+    msg = request.POST['message']
+
+    print(dest, src, msg)
+
+    destUser = User.objects.get(id=dest)
+    srcUser = User.objects.get(id=src)
+
+    message = Message.objects.create(origin=srcUser, destination=destUser, text=msg, date=timezone.now())
+    message.save()
+
+    return redirect("chatapp:home")
 
 
-def public_chat(request):
-    return render(request, 'chatapp/public_chat.html')
+def load_messages(request):
 
+    dest = int(request.GET['to'])
+    src = int(request.GET['from'])
 
-def login_view(request):
-    nick = request.POST['name']
-    passw = request.POST['password']
+    destUser = User.objects.get(id=dest)
+    srcUser = User.objects.get(id=src)
 
-    if nick is None or passw is None:
-        print("OLOCO")
+    if dest == 1:
+        messages = Message.objects.filter(destination=destUser)
+    else:
+        messages = Message.objects.filter(destination=destUser, origin=srcUser)
 
-    user = authenticate(request, username=nick, password=passw)
-
-    if user is None:
-        print("NAO LOGOU")
-        return HttpResponse('Unauthorized', status=401)
-
-    print(user)
-
-    login(request, user)
-    return redirect(request, 'chatapp/public_chat.html')
-    # return redirect(render(request, 'chatapp/public_chat.html'))
-
-
-def logout_view(request):
-    logout(request)
-    return redirect(render(request, 'chatapp/index.html'))
+    return render_to_response('chatapp/messages.html', {'messages': messages})
 
 
 # @login_required
