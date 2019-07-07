@@ -25,7 +25,7 @@ SECRET_KEY = 'p-7*^2cq3jx7j1r^6j_y#ux(+87=_bvlvedajxz-k2*n_#fwy2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.112']
+ALLOWED_HOSTS = ['*']
 
 LOGIN_REDIRECT_URL = 'chatapp:home'
 LOGOUT_REDIRECT_URL = 'chatapp:login'
