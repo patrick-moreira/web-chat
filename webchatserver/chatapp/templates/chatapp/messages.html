@@ -1,9 +1,20 @@
 {% if messages %}
 
-    <ul style="list-style: none;">
-    {% for msg in messages %}
-        <li> <b>{{ msg.origin }}</b>: {{ msg.text }} </li>
-    {% endfor %}
-    </ul>
+    <table>
+        {% for msg in messages %}
+        <tr>
+            <td>
+                {% if msg.origin == user%}
+                    <b>{{ msg.origin }}:</b>
+                {% else %}
+                    <a href="{% url 'chatapp:private' user.id msg.origin.id %}" id="talk-id"> {{msg.origin}}: </a>
+                {% endif %}
+            </td>
+            <td>
+                {{msg.text}}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
 
 {% endif %}

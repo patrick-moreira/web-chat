@@ -4,39 +4,32 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-    Hi {{ user.username }}!
+    Hi {{ user.username }} {{user.id}}!
     <p><a href="{% url 'chatapp:logout' %}">Logout</a></p>
 
-    <div id="messages-div">
-    </div>
+    <div id="messages-div"> </div>
 
     <input id="text-field" type="text">
-    <button id="send-button" type="button"> Enviar </button>
+    <button id="send-button" type="submit"> Enviar </button>
 
     <script>
 
-        loadMessages = function() {
+        loadMessages = function(src, dest) {
+            console.log(src, dest);
             $.get({
                 url: "{% url 'chatapp:load_messages' %}",
                 data: {
-                    "to": 1,
-                    "from": "{{user.id}}"
+                    "to": dest,
+                    "from": src
                 }
             }).done(function(response) {
-                console.log("ENTROU");
                 $("#messages-div").html(response);
             })
-
         };
 
-        $(document).ready(function () {
-            loadMessages();
-            window.setInterval(loadMessages, 2500);
-        });
-
-        $("#send-button").click(function(){
-            var textfield = $("#text-field");
-            var msg = textfield.val();
+        sendMessageEvent = function() {
+            let textfield = $("#text-field");
+            let msg = textfield.val();
 
             textfield.val('');
 
@@ -48,15 +41,28 @@
                 url: "{% url 'chatapp:send_message' %}",
                 data: {
                     'message': msg,
-                    'to': 1,
+                    'to': "8",
                     'from': "{{user.id}}"
                 },
                 headers: {
                     "X-CSRFToken": Cookies.get('csrftoken')
                 }
             }).done(function(response) {
-                loadMessages();
+                loadMessages("{{user.id}}", "8");
             })
+        };
+
+        $(document).ready(function () {
+            loadMessages("{{user.id}}", "8");
+            window.setInterval(function() { loadMessages("{{user.id}}", "8") }, 2500);
+        });
+
+        $("#send-button").click(sendMessageEvent);
+        $("#text-field").keypress(function(event) {
+            let keycode = (event.keyCode ? event.keyCode : event.which);
+            if(keycode == '13'){
+               sendMessageEvent();
+            }
         });
 
     </script>

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+    {% if user.is_authenticated %}
+        <p><a href="{% url 'chatapp:home' %}">Voltar</a></p>
+
+        <div id="messages-div"> </div>
+
+        <input id="text-field" type="text">
+        <button id="send-button" type="button"> Enviar </button>
+
+        <script>
+
+            loadMessages = function(src, dest) {
+                console.log(src, dest);
+                $.get({
+                    url: "{% url 'chatapp:load_messages' %}",
+                    data: {
+                        "to": dest,
+                        "from": src
+                    }
+                }).done(function(response) {
+                    $("#messages-div").html(response);
+                })
+            };
+
+            sendMessageEvent = function() {
+                let textfield = $("#text-field");
+                let msg = textfield.val();
+
+                textfield.val('');
+
+                if (msg === "") {
+                    return;
+                }
+
+                $.post({
+                    url: "{% url 'chatapp:send_message' %}",
+                    data: {
+                        'message': msg,
+                        'to': "{{dest}}",
+                        'from': "{{user.id}}"
+                    },
+                    headers: {
+                        "X-CSRFToken": Cookies.get('csrftoken')
+                    }
+                }).done(function(response) {
+                    loadMessages("{{user.id}}", "{{dest}}");
+                })
+            };
+
+            $(document).ready(function () {
+                loadMessages("{{user.id}}", "{{dest}}");
+                window.setInterval(function() { loadMessages("{{user.id}}", "{{dest}}") }, 2500);
+            });
+
+            $("#send-button").click(sendMessageEvent);
+            $("#text-field").keypress(function(event) {
+                let keycode = (event.keyCode ? event.keyCode : event.which);
+                if(keycode == '13'){
+                   sendMessageEvent();
+                }
+            });
+
+        </script>
+
+    {% else %}
+      <p>You are not logged in</p>
+      <a href="{% url 'login' %}">login</a>
+    {% endif %}
+
+
+{% endblock %}

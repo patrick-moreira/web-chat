@@ -10,6 +10,6 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('chat/', views.ChatView.as_view(), name='home'),
     path('message/', views.send_message, name='send_message'),
-    path('load_messages/', views.load_messages, name='load_messages')
-
+    path('load_messages/', views.load_messages, name='load_messages'),
+    path('private/<int:user1>/<int:user2>', views.private_chat, name='private')
 ]
