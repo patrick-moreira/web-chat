@@ -27,6 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+STATICFILES_DIR = [
+    "webchatserver/chatapp/static",
+]
+
+
 LOGIN_REDIRECT_URL = 'chatapp:home'
 LOGOUT_REDIRECT_URL = 'chatapp:login'
 
@@ -137,3 +142,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static/'
+

@@ -3,26 +3,32 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<h2>Login</h2>
-<form method="post" action="{% url 'chatapp:login' %}">
-    {% csrf_token %}
-    <table>
-    <tr>
-        <td>{{ form.username.label_tag }}</td>
-        <td>{{ form.username }}</td>
-    </tr>
-    <tr>
-        <td>{{ form.password.label_tag }}</td>
-        <td>{{ form.password }}</td>
-    </tr>
-    </table>
 
-    <input type="submit" value="Login">
-    <button id="signup" type=button> Cadastrar </button>
-    <input type="hidden" name="next" value="{{ next }}">
-</form>
+<div class="container">
+    
+    <form method="post" action="{% url 'chatapp:login' %}">
+        <h2>Login</h2>
+        {% csrf_token %}
+        
+        <table>
+            <tr class="trs-username-password">
+                <td class="tds-username-password">{{ form.username.label_tag }}</td>
+                <td>{{ form.username }}</td>
+            </tr>
+            <tr class="trs-username-password">
+                <td class="tds-username-password">{{ form.password.label_tag }}</td>
+                <td>{{ form.password }}</td>
+            </tr>
+        </table>
+        <hr>
+        <div id="container-btns">
+            <input type="submit" value="Login" class="btns">
+            <button id="signup" type=button class="btns"> Cadastrar </button>
+            <input type="hidden" name="next" value="{{ next }}">
+        </div>    
+    </form>
+</div>
 
-<hr>
 
 <script>
     document.getElementById("signup").addEventListener("click", function() {
