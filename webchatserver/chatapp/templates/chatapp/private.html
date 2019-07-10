@@ -5,12 +5,19 @@
 {% block content %}
 
     {% if user.is_authenticated %}
-        <p><a href="{% url 'chatapp:home' %}">Voltar</a></p>
 
-        <div id="messages-div"> </div>
+        <div>
+            <div class="container-chat">
+                <p><a href="{% url 'chatapp:home' %}">Voltar</a></p>
+            </div>    
 
-        <input id="text-field" type="text">
-        <button id="send-button" type="button"> Enviar </button>
+            <div id="messages-div"> </div>
+
+            <div class="container-input-btnEnviar">
+                <input id="text-field" type="text" placeholder="Digite sua mensagem...">
+                <button id="send-button" type="button" class="btns"> Enviar </button>
+            </div>
+        </div>
 
         <script>
 

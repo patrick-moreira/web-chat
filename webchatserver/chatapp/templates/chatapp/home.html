@@ -3,14 +3,22 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+
 {% if user.is_authenticated %}
-    Hi {{ user.username }} {{user.id}}!
-    <p><a href="{% url 'chatapp:logout' %}">Logout</a></p>
+    
+    <div>
+        <div class="container-chat"> 
+            <p><a href="{% url 'chatapp:logout' %}">Logout</a></p>
+            <div class="user-chat"><h2>Hi {{ user.username }} {{user.id}}!</h2></div> 
+        </div>
 
-    <div id="messages-div"> </div>
-
-    <input id="text-field" type="text">
-    <button id="send-button" type="submit"> Enviar </button>
+        <div id="messages-div"></div>
+            
+        <div class="container-input-btnEnviar">
+            <input id="text-field" type="text" placeholder="Digite sua mensagem...">
+            <button id="send-button" type="submit" class="btns"> Enviar </button>
+        </div>    
+    </div>
 
     <script>
 
